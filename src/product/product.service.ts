@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Status } from './product.model';
+import { Product, Status } from './product.model';
 import { CreateProductRequestDto } from './dto/CreateProductRequestDto';
 
 @Injectable()
 export class ProductService {
   private products = [];
 
+  getProduct(id: number): Product {
+    return this.products.find((product) => product.id === id);
+  }
   getProducts() {
     return this.products;
   }
