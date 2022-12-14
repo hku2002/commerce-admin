@@ -1,4 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ProductService {}
+export class ProductService {
+  private products = [];
+
+  getProducts() {
+    return this.products;
+  }
+}
