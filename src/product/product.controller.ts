@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ProductService } from './product.service';
 import { CreateProductRequestDto } from './dto/CreateProductRequestDto';
 
@@ -17,6 +17,7 @@ export class ProductController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createProduct(
     @Body() createProductRequestDto: CreateProductRequestDto,
   ): number {

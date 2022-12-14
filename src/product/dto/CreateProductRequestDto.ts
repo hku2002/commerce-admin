@@ -1,7 +1,14 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class CreateProductRequestDto {
-  id: string;
+  @IsNotEmpty()
   name: string;
+
   imgPath: string;
+
+  @IsNotEmpty()
   defaultPrice: number;
+
+  @IsNotEmpty()
   salePrice: number;
 }
