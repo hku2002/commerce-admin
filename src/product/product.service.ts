@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product, Status } from './product.model';
 import { CreateProductRequestDto } from './dto/CreateProductRequestDto';
 
@@ -7,7 +7,12 @@ export class ProductService {
   private products = [];
 
   getProduct(id: number): Product {
-    return this.products.find((product) => product.id === id);
+    const product = this.products.find((product) => product.id === id);
+    if (!product) {
+      throw new NotFoundException('상품을 찾을 수 없습니다.');
+    }
+
+    return product;
   }
   getProducts() {
     return this.products;
