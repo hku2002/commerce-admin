@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Status } from './product.model';
+import { CreateProductRequestDto } from './dto/CreateProductRequestDto';
 
 @Injectable()
 export class ProductService {
@@ -9,19 +10,15 @@ export class ProductService {
     return this.products;
   }
 
-  createProduct(
-    name: string,
-    imgPath: string,
-    defaultPrice: number,
-    salePrice: number,
-  ) {
+  createProduct(createProductRequestDto: CreateProductRequestDto) {
     const newId = 1;
+    const { name, imgPath, salePrice, defaultPrice } = createProductRequestDto;
     const product = {
       id: newId,
-      name: name,
-      imgPath: imgPath,
-      defaultPrice: defaultPrice,
-      salePrice: salePrice,
+      name,
+      imgPath,
+      defaultPrice,
+      salePrice,
       status: Status.STAND_BY,
     };
 
