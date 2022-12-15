@@ -1,12 +1,3 @@
-export interface Product {
-  id: string;
-  name: string;
-  imgPath: string;
-  defaultPrice: number;
-  salePrice: number;
-  status: Status;
-}
-
 export enum Status {
   STAND_BY = 'STAND_BY',
   DISPLAY = 'DISPLAY',
