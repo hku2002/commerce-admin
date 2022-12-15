@@ -12,5 +12,5 @@ export enum Status {
   DISPLAY = 'DISPLAY',
   OUT_OF_STOCK = 'OUT_OF_STOCK',
   SOLD_OUT = 'SOLD_OUT',
-  END = 'END'
+  END = 'END',
 }

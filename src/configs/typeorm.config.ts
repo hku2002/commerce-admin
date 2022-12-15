@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: 'mysql',
@@ -10,4 +11,5 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   synchronize: true, // true 면 자동 테이블 생성
   logging: true,
   entities: [__dirname + '../**/*.entity.{js,ts}'],
+  namingStrategy: new SnakeNamingStrategy(),
 };
