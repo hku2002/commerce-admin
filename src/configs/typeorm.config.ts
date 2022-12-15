@@ -3,13 +3,11 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: 'mysql',
   host: 'localhost',
-  port: 5432,
-  username: 'ea',
-  password: 'test',
-  database: 'test',
-  synchronize: true,
+  port: 3306,
+  username: 'root',
+  password: '1234',
+  database: 'commerce',
+  synchronize: true, // true 면 자동 테이블 생성
   logging: true,
-  entities: [],
-  subscribers: [],
-  migrations: [],
+  entities: [__dirname + '../**/*.entity.{js,ts}'],
 };
