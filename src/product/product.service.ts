@@ -2,21 +2,24 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Status } from './entity/enum/product.enum';
 import { CreateProductRequestDto } from './dto/CreateProductRequestDto';
 import { Product } from './entity/product.entity';
+import { ProductRepository } from './repository/product.repository';
 
 @Injectable()
 export class ProductService {
+  constructor(private productRepository: ProductRepository) {}
+
   private products = [];
 
-  getProduct(id: number): Product {
-    const product = this.products.find((product) => product.id === id);
+  async getProduct(id: number): Promise<Product> {
+    const product = await this.productRepository.findOneBy({ id });
     if (!product) {
       throw new NotFoundException('상품을 찾을 수 없습니다.');
     }
 
     return product;
   }
-  getProducts() {
-    return this.products;
+  async getProducts() {
+    return await this.productRepository.find();
   }
 
   createProduct(createProductRequestDto: CreateProductRequestDto) {
