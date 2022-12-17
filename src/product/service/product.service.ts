@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Status } from './entity/enum/product.enum';
-import { CreateProductRequestDto } from './dto/CreateProductRequestDto';
-import { Product } from './entity/product.entity';
-import { ProductRepository } from './repository/product.repository';
+import { Status } from '../entity/enum/product.enum';
+import { CreateProductRequestDto } from '../dto/CreateProductRequestDto';
+import { Product } from '../entity/product.entity';
+import { ProductRepository } from '../repository/product.repository';
 
 @Injectable()
 export class ProductService {
