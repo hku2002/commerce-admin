@@ -22,7 +22,7 @@ export class Product extends BaseEntity {
   discountPrice: number;
 
   @Column({ type: 'int', nullable: false })
-  discountPate: number;
+  discountRate: number;
 
   @Column({ type: 'varchar', length: 30, nullable: false })
   discountMethod: string;

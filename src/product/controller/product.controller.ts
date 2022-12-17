@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ProductService } from '../service/product.service';
 import { CreateProductRequestDto } from '../dto/CreateProductRequestDto';
+import { Product } from '../entity/product.entity';
 
 @Controller('product')
 export class ProductController {
@@ -28,7 +29,7 @@ export class ProductController {
   @UsePipes(ValidationPipe)
   createProduct(
     @Body() createProductRequestDto: CreateProductRequestDto,
-  ): number {
+  ): Promise<Product> {
     return this.productService.createProduct(createProductRequestDto);
   }
 }
