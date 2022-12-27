@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateProductItemRequestDto {
+export class CreateItemRequestDto {
   @IsNotEmpty()
   name: string;
 
@@ -26,5 +26,5 @@ export class CreateProductItemRequestDto {
   supplyPrice: number;
 
   @IsNotEmpty()
-  stock_quantity: number;
+  stockQuantity: number;
 }
