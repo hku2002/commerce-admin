@@ -26,7 +26,7 @@ export class AuthService {
 
   async signIn(
     signInRequestDto: SignInRequestDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const { email, password } = signInRequestDto;
     const adminUser = await this.adminUserRepository.findOne({
       where: { email },
@@ -37,9 +37,19 @@ export class AuthService {
     const id = adminUser.id;
     const username = adminUser.username;
     const payload = { id, username };
-    const accessToken = await this.jwtService.signAsync(payload);
-    return { accessToken };
-    // TODO accessToken, refreshToken 2개 관리하는 방식으로 변경
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        secret:
+          'hku2002testSecretText1234ManyManyLongText0001HelloWorld-access',
+        expiresIn: '1h',
+      }),
+      this.jwtService.signAsync(payload, {
+        secret:
+          'hku2002testSecretText1234ManyManyLongText0001HelloWorld-refresh',
+        expiresIn: '3h',
+      }),
+    ]);
+    return { accessToken, refreshToken };
   }
 
   async generateHashedPassword(password): Promise<string> {

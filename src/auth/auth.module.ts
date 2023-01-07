@@ -4,7 +4,8 @@ import { AuthService } from './service/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AdminUserRepository } from './repository/admin-user.repository';
-import { JwtStrategy } from './strategy/jwt.strategy';
+import { JwtAccessTokenStrategy } from './strategy/jwt-access-token.strategy';
+import { JwtRefreshTokenStrategy } from './strategy/jwt-refresh-token.strategy';
 
 @Module({
   imports: [
@@ -17,7 +18,12 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AdminUserRepository, JwtStrategy],
-  exports: [JwtStrategy, PassportModule],
+  providers: [
+    AuthService,
+    AdminUserRepository,
+    JwtAccessTokenStrategy,
+    JwtRefreshTokenStrategy,
+  ],
+  exports: [JwtAccessTokenStrategy, JwtRefreshTokenStrategy, PassportModule],
 })
 export class AuthModule {}
