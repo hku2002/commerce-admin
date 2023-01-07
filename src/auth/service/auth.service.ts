@@ -35,21 +35,7 @@ export class AuthService {
     });
     await this.checkAdminUserExist(adminUser);
     await this.checkPassword(password, adminUser.password);
-
-    const id = adminUser.id;
-    const username = adminUser.username;
-    const payload = { id, username };
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-        expiresIn: this.configService.get<string>('JWT_ACCESS_EXPIRES_IN'),
-      }),
-      this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-        expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRES_IN'),
-      }),
-    ]);
-    return { accessToken, refreshToken };
+    return await this.getTokens(adminUser.id, adminUser.username);
   }
 
   async generateHashedPassword(password): Promise<string> {
@@ -67,5 +53,24 @@ export class AuthService {
     if (!(await bcrypt.compare(plainPassword, hashedPassword))) {
       throw new UnauthorizedException('로그인에 실패하였습니다.');
     }
+  }
+
+  async getTokens(
+    id,
+    username,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const payload = { id, username };
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+        expiresIn: this.configService.get<string>('JWT_ACCESS_EXPIRES_IN'),
+      }),
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+        expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRES_IN'),
+      }),
+    ]);
+
+    return { accessToken, refreshToken };
   }
 }
