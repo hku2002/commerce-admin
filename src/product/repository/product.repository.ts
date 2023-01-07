@@ -1,7 +1,7 @@
 import { Product } from '../entity/product.entity';
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { CreateProductRequestDto } from '../dto/CreateProductRequestDto';
+import { CreateProductRequestDto } from '../dto/create-product.request.dto';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {

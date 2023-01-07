@@ -6,7 +6,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ItemService } from '../service/item.service';
-import { CreateItemRequestDto } from '../dto/CreateItemRequestDto';
+import { CreateItemRequestDto } from '../dto/create-item.request.dto';
 import { Item } from '../entity/item.entity';
 
 @Controller('item')

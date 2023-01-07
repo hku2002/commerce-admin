@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SignInDto } from '../dto/signIn.dto';
-import { SignUpDto } from '../dto/signUp.dto';
+import { SignInRequestDto } from '../dto/sign-in.request.dto';
+import { SignUpRequestDto } from '../dto/sign-up.request.dto';
 import * as bcrypt from 'bcryptjs';
-import { AdminUserRepository } from '../repository/adminUser.repository';
-import { AdminUser } from '../entity/adminUser.entity';
+import { AdminUserRepository } from '../repository/admin-user.repository';
+import { AdminUser } from '../entity/admin-user.entity';
 
 @Injectable()
 export class AuthService {
@@ -13,8 +13,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto): Promise<boolean> {
-    const { email, password, username } = signUpDto;
+  async signUp(signUpRequestDto: SignUpRequestDto): Promise<boolean> {
+    const { email, password, username } = signUpRequestDto;
     const hashedPassword = await this.generateHashedPassword(password);
     await this.adminUserRepository.createAdminUser({
       email,
@@ -24,8 +24,10 @@ export class AuthService {
     return true;
   }
 
-  async signIn(signInDto: SignInDto): Promise<{ accessToken: string }> {
-    const { email, password } = signInDto;
+  async signIn(
+    signInRequestDto: SignInRequestDto,
+  ): Promise<{ accessToken: string }> {
+    const { email, password } = signInRequestDto;
     const adminUser: AdminUser = await this.adminUserRepository.findOne({
       where: { email },
     });

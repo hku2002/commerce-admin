@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { AdminUser } from '../entity/adminUser.entity';
+import { AdminUser } from '../entity/admin-user.entity';
 
 @Injectable()
 export class AdminUserRepository extends Repository<AdminUser> {

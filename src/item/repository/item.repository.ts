@@ -1,7 +1,7 @@
 import { Item } from '../entity/item.entity';
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { CreateItemRequestDto } from '../dto/CreateItemRequestDto';
+import { CreateItemRequestDto } from '../dto/create-item.request.dto';
 
 @Injectable()
 export class ItemRepository extends Repository<Item> {

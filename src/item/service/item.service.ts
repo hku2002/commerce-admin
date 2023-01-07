@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateItemRequestDto } from '../dto/CreateItemRequestDto';
+import { CreateItemRequestDto } from '../dto/create-item.request.dto';
 import { Item } from '../entity/item.entity';
 import { ItemRepository } from '../repository/item.repository';
 
