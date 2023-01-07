@@ -5,12 +5,14 @@ import { SignUpRequestDto } from '../dto/sign-up.request.dto';
 import * as bcrypt from 'bcryptjs';
 import { AdminUserRepository } from '../repository/admin-user.repository';
 import { AdminUser } from '../entity/admin-user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private adminUserRepository: AdminUserRepository,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async signUp(signUpRequestDto: SignUpRequestDto): Promise<boolean> {
@@ -39,14 +41,12 @@ export class AuthService {
     const payload = { id, username };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret:
-          'hku2002testSecretText1234ManyManyLongText0001HelloWorld-access',
-        expiresIn: '1h',
+        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+        expiresIn: this.configService.get<string>('JWT_ACCESS_EXPIRES_IN'),
       }),
       this.jwtService.signAsync(payload, {
-        secret:
-          'hku2002testSecretText1234ManyManyLongText0001HelloWorld-refresh',
-        expiresIn: '3h',
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+        expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRES_IN'),
       }),
     ]);
     return { accessToken, refreshToken };
