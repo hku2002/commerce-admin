@@ -46,7 +46,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async generateHashedPassword(password): Promise<string> {
+  async generateHashedPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt();
     return await bcrypt.hash(password, salt);
   }
@@ -57,15 +57,18 @@ export class AuthService {
     }
   }
 
-  async checkPassword(plainPassword, hashedPassword): Promise<void> {
+  async checkPassword(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<void> {
     if (!(await bcrypt.compare(plainPassword, hashedPassword))) {
       throw new UnauthorizedException('로그인에 실패하였습니다.');
     }
   }
 
   async getTokens(
-    id,
-    username,
+    id: number,
+    username: string,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const payload = { id, username };
     const [accessToken, refreshToken] = await Promise.all([
