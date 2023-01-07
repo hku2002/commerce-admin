@@ -35,7 +35,15 @@ export class AuthService {
     });
     await this.checkAdminUserExist(adminUser);
     await this.checkPassword(password, adminUser.password);
-    return await this.getTokens(adminUser.id, adminUser.username);
+    const { accessToken, refreshToken } = await this.getTokens(
+      adminUser.id,
+      adminUser.username,
+    );
+    await this.adminUserRepository.update(
+      { id: adminUser.id },
+      { refreshToken },
+    );
+    return { accessToken, refreshToken };
   }
 
   async generateHashedPassword(password): Promise<string> {

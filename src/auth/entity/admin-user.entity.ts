@@ -14,6 +14,9 @@ export class AdminUser extends BaseEntity {
   @Column({ type: 'varchar', length: 30, nullable: false })
   username: string;
 
+  @Column({ type: 'varchar', length: 256, nullable: true })
+  refreshToken: string;
+
   @Column({ type: 'tinyint', nullable: false })
   activated: boolean;
 
