@@ -10,12 +10,7 @@ import { JwtRefreshTokenStrategy } from './strategy/jwt-refresh-token.strategy';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: 'hku2002testSecretText1234ManyManyLongText0001HelloWorld',
-      signOptions: {
-        expiresIn: 60 * 60,
-      },
-    }),
+    JwtModule.register({}),
   ],
   controllers: [AuthController],
   providers: [
