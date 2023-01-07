@@ -28,14 +28,14 @@ export class AuthService {
     signInRequestDto: SignInRequestDto,
   ): Promise<{ accessToken: string }> {
     const { email, password } = signInRequestDto;
-    const adminUser: AdminUser = await this.adminUserRepository.findOne({
+    const adminUser = await this.adminUserRepository.findOne({
       where: { email },
     });
     await this.checkAdminUserExist(adminUser);
     await this.checkPassword(password, adminUser.password);
 
-    const id: number = adminUser.id;
-    const username: string = adminUser.username;
+    const id = adminUser.id;
+    const username = adminUser.username;
     const payload = { id, username };
     const accessToken = await this.jwtService.signAsync(payload);
     return { accessToken };
