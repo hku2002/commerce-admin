@@ -33,7 +33,8 @@ export class AuthService {
     await this.checkPassword(password, adminUser.password);
 
     const id: number = adminUser.id;
-    const payload = { id };
+    const username: string = adminUser.username;
+    const payload = { id, username };
     const accessToken = await this.jwtService.signAsync(payload);
     return { accessToken };
     // TODO accessToken, refreshToken 2개 관리하는 방식으로 변경
