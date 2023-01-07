@@ -31,7 +31,7 @@ export class AuthService {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const { email, password } = signInRequestDto;
     const adminUser = await this.adminUserRepository.findOne({
-      where: { email },
+      where: { email, activated: true },
     });
     await this.checkAdminUserExist(adminUser);
     await this.checkPassword(password, adminUser.password);
