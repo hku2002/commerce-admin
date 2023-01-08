@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -23,7 +25,15 @@ export class AuthController {
   @UsePipes(ValidationPipe)
   signIn(
     @Body() signInRequestDto: SignInRequestDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     return this.authService.signIn(signInRequestDto);
+  }
+
+  @Get('/refresh')
+  @UsePipes(ValidationPipe)
+  refresh(
+    @Query('refreshToken') refreshTokenParam: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    return this.authService.refreshTokens(refreshTokenParam);
   }
 }

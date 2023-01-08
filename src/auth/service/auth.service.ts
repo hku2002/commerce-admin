@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Scope,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignInRequestDto } from '../dto/sign-in.request.dto';
 import { SignUpRequestDto } from '../dto/sign-up.request.dto';
@@ -6,13 +11,17 @@ import * as bcrypt from 'bcryptjs';
 import { AdminUserRepository } from '../repository/admin-user.repository';
 import { AdminUser } from '../entity/admin-user.entity';
 import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
+import { REQUEST } from '@nestjs/core';
+import * as dayjs from 'dayjs';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class AuthService {
   constructor(
     private adminUserRepository: AdminUserRepository,
     private jwtService: JwtService,
     private configService: ConfigService,
+    @Inject(REQUEST) private readonly request: Request,
   ) {}
 
   async signUp(signUpRequestDto: SignUpRequestDto): Promise<boolean> {
@@ -41,7 +50,41 @@ export class AuthService {
     );
     await this.adminUserRepository.update(
       { id: adminUser.id },
-      { refreshToken },
+      { refreshToken, updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss') },
+    );
+    return { accessToken, refreshToken };
+  }
+
+  async refreshTokens(refreshTokenParam: string): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
+    try {
+      await this.jwtService.verifyAsync(refreshTokenParam, {
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+      });
+    } catch (error) {
+      throw new UnauthorizedException('인증에 실패하였습니다.');
+    }
+
+    // TODO 만료시간 체크
+
+    const decode = this.getTokenDecode(refreshTokenParam);
+    const adminUser = await this.adminUserRepository.findOne({
+      where: { id: decode['id'], activated: true },
+    });
+
+    if (!this.tokenCompare(refreshTokenParam, adminUser?.refreshToken)) {
+      throw new UnauthorizedException('인증에 실패하였습니다.');
+    }
+
+    const { accessToken, refreshToken } = await this.getTokens(
+      adminUser.id,
+      adminUser.username,
+    );
+    await this.adminUserRepository.update(
+      { id: adminUser.id },
+      { refreshToken, updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss') },
     );
     return { accessToken, refreshToken };
   }
@@ -83,5 +126,21 @@ export class AuthService {
     ]);
 
     return { accessToken, refreshToken };
+  }
+
+  getTokenDecode(refreshToken: string): { [p: string]: any } | string {
+    const decoded = this.jwtService.decode(refreshToken);
+    if (!decoded) {
+      throw new UnauthorizedException('토큰 정보가 없습니다.');
+    }
+
+    return decoded;
+  }
+
+  tokenCompare(tokenParam: string, savedToken: string): boolean {
+    if (tokenParam === savedToken) {
+      return true;
+    }
+    return false;
   }
 }
